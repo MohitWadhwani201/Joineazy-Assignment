@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getMyGroups } from "../services/groupService";
-import { addMember } from "../services/groupService";
+import { getMyGroups, addMember } from "../services/groupService";
 
 export default function MyGroups() {
   const [groups, setGroups] = useState([]);
@@ -8,6 +7,7 @@ export default function MyGroups() {
   const [adding, setAdding] = useState({});
   const [msg, setMsg] = useState("");
 
+  // Load groups
   useEffect(() => {
     const load = async () => {
       try {
@@ -15,6 +15,7 @@ export default function MyGroups() {
         setGroups(data);
       } catch (err) {
         console.error(err);
+        setMsg("Failed to fetch groups");
       } finally {
         setLoading(false);
       }
@@ -22,15 +23,20 @@ export default function MyGroups() {
     load();
   }, []);
 
+  // Handle adding a member to a group
   const handleAdd = async (groupId) => {
     const email = adding[groupId];
     if (!email) return setMsg("Enter email to add");
     try {
       await addMember(groupId, { email });
       setMsg("Member added (or invited)");
-      // refresh
+
+      // Refresh groups
       const data = await getMyGroups();
       setGroups(data);
+
+      // Clear input for this group
+      setAdding((prev) => ({ ...prev, [groupId]: "" }));
     } catch (err) {
       setMsg(err.response?.data?.message || "Failed to add member");
     }
@@ -41,15 +47,23 @@ export default function MyGroups() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">My Groups</h1>
+
       <div className="space-y-3">
-        {groups.length === 0 && <div className="bg-white p-4 rounded shadow">No groups yet</div>}
-        {groups.map(g => (
-          <div key={g._id} className="bg-white p-4 rounded shadow">
+        {groups.length === 0 && (
+          <div className="bg-white p-4 rounded shadow">No groups yet</div>
+        )}
+
+        {groups.map((g) => (
+          <div key={g.id} className="bg-white p-4 rounded shadow">
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="font-semibold">{g.name}</h3>
-                <p className="text-sm text-gray-500">Leader: {g.leader?.name || "—"}</p>
-                <p className="text-sm text-gray-600">Members: {g.members?.map(m => m.name).join(", ")}</p>
+                <p className="text-sm text-gray-500">
+                  Leader: {g.Leader?.name || "—"}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Members: {g.Members?.map((m) => m.name).join(", ") || "—"}
+                </p>
               </div>
             </div>
 
@@ -57,17 +71,25 @@ export default function MyGroups() {
               <input
                 placeholder="Member email to add"
                 className="border p-2 rounded w-full"
-                value={adding[g._id] || ""}
-                onChange={(e)=> setAdding(prev => ({ ...prev, [g._id]: e.target.value }))}
+                value={adding[g.id] || ""}
+                onChange={(e) =>
+                  setAdding((prev) => ({ ...prev, [g.id]: e.target.value }))
+                }
               />
               <div className="mt-2">
-                <button onClick={()=>handleAdd(g._id)} className="bg-indigo-600 text-white px-3 py-1 rounded">Add Member</button>
+                <button
+                  onClick={() => handleAdd(g.id)}
+                  className="bg-indigo-600 text-white px-3 py-1 rounded"
+                >
+                  Add Member
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
-      {msg && <div className="mt-3 text-sm">{msg}</div>}
+
+      {msg && <div className="mt-3 text-sm text-green-600">{msg}</div>}
     </div>
   );
 }

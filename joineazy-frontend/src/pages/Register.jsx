@@ -11,25 +11,15 @@ export default function Register() {
   const [role, setRole] = useState("student");
   const [err, setErr] = useState("");
 
-  const submit = async (e) => {
+ const submit = async (e) => {
     e.preventDefault();
     setErr("");
     try {
-      const res = await register(name, email, password, role); // res.user should have role
-      const userRole = res.user.role;
-
-      // Role-based redirect
-      if (userRole === "admin") {
-        navigate("/admin");
-      } else if (userRole === "student") {
-        navigate("/student");
-      } else {
-        navigate("/"); // fallback
-      }
+        await register(name, email, password, role); // redirect handled by App.jsx
     } catch (error) {
-      setErr(error.response?.data?.message || "Registration failed");
+        setErr(error.response?.data?.message || "Registration failed");
     }
-  };
+};
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow">

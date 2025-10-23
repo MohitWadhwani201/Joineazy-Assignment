@@ -38,7 +38,7 @@ export default function AdminAssignments() {
       <h1 className="text-xl font-bold mb-4">All Assignments (Admin)</h1>
       <div className="space-y-3">
         {assignments.map(a => (
-          <div key={a._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
+          <div key={a.id} className="bg-white p-4 rounded shadow flex justify-between items-center">
             <div>
               <h3 className="font-semibold">{a.title}</h3>
               <p className="text-sm text-gray-600">{a.description}</p>
@@ -47,7 +47,7 @@ export default function AdminAssignments() {
             <div className="flex flex-col items-end">
               <a href={a.oneDriveLink} target="_blank" rel="noreferrer" className="text-indigo-600">OneDrive</a>
               <div className="mt-2">
-                <button onClick={()=>handleDelete(a._id)} className="bg-red-500 text-white px-3 py-1 rounded text-sm">Delete</button>
+                <button onClick={()=>handleDelete(a.id)} className="bg-red-500 text-white px-3 py-1 rounded text-sm">Delete</button>
               </div>
             </div>
           </div>

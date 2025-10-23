@@ -14,10 +14,20 @@ import AssignmentDetails from "./pages/AssignmentDetails";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleRoute from "./components/RoleRoute";
+import AdminReports from "./pages/AdminReports";
 import { useAuth } from "./hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+        if (user) {
+            if (user.role === 'admin') navigate('/admin');
+            else navigate('/student');
+        }
+    }, [user]);
 
   return (
     <div className="min-h-screen">
@@ -42,6 +52,7 @@ export default function App() {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/assignments" element={<AdminAssignments />} />
               <Route path="/admin/assignments/create" element={<CreateAssignment />} />
+              <Route path="/admin/reports" element={<AdminReports />} />
             </Route>
           </Route>
 

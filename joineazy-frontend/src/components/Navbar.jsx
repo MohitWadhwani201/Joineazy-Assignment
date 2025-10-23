@@ -35,7 +35,7 @@ export default function NavBar() {
             </>
           )}
 
-          {user ? (
+          {user && (
             <>
               <div className="text-sm text-gray-600">Hi, {user.name}</div>
               <button
@@ -45,7 +45,7 @@ export default function NavBar() {
                 Logout
               </button>
             </>
-          ) : null}
+          )}
         </div>
       </div>
     </nav>

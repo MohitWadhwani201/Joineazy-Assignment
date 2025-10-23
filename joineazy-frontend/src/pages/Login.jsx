@@ -9,25 +9,16 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
 
-  const submit = async (e) => {
+ const submit = async (e) => {
     e.preventDefault();
     setErr("");
     try {
-      const res = await login(email, password); // res.user should have role
-      const role = res.user.role;
-
-      // Role-based redirection
-      if (role === "admin") {
-        navigate("/admin");
-      } else if (role === "student") {
-        navigate("/student");
-      } else {
-        navigate("/"); // fallback
-      }
+        await login(email, password); // role-based redirect is handled in App.jsx useEffect
     } catch (error) {
-      setErr(error.response?.data?.message || "Login failed");
+        setErr(error.response?.data?.message || "Login failed");
     }
-  };
+};
+
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
