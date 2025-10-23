@@ -1,6 +1,6 @@
 # 📝 Joineazy Assignment Management System
 
-**[Node.js v18+] [React v18+] [PostgreSQL v15] [MIT License]**
+**[Node.js v18+] [React v18+] [PostgreSQL v15] **
 
 A full-stack assignment management platform for admins and students, featuring group-wise submissions, OneDrive integration, and detailed reporting.  
 
